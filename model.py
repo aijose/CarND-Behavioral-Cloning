@@ -6,6 +6,12 @@ from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Conv2D, Dense
 from scipy import ndimage
 
+seed_value = 123
+from numpy.random import seed
+seed(seed_value)
+from tensorflow import set_random_seed
+set_random_seed(seed_value)
+
 lines = []
 with open('data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
@@ -43,7 +49,7 @@ y_train = np.array(augmented_measurements)
 
 model = Sequential()
 model.add(Lambda(lambda x: (x - 128.0)/128.0, input_shape = (160, 320, 3)))
-model.add(Cropping2D(cropping=((40,25), (0,0))))
+model.add(Cropping2D(cropping=((70,25), (0,0))))
 model.add(Conv2D(24, (5, 5), activation='relu', padding='valid'))
 #model.add(Conv2D(24, (5, 5), activation='relu', padding='valid'))
 model.add(Conv2D(36, (5, 5), activation='relu', padding='valid'))
@@ -57,7 +63,7 @@ model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, epochs=2)
 
 #history_object = model.fit_generator(train_generator, samples_per_epoch =
 #    len(train_samples), validation_data = 
