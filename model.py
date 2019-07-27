@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Cropping2D
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Conv2D, Dense
 from scipy import ndimage
 
 lines = []
@@ -42,14 +42,22 @@ X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
 
 model = Sequential()
-model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160, 320, 3)))
-model.add(Cropping2D(cropping=((70,25), (0,0))))
+model.add(Lambda(lambda x: (x - 128.0)/128.0, input_shape = (160, 320, 3)))
+model.add(Cropping2D(cropping=((40,25), (0,0))))
+model.add(Conv2D(24, (5, 5), activation='relu', padding='valid'))
+#model.add(Conv2D(24, (5, 5), activation='relu', padding='valid'))
+model.add(Conv2D(36, (5, 5), activation='relu', padding='valid'))
+model.add(Conv2D(48, (5, 5), activation='relu', padding='valid'))
+model.add(Conv2D(64, (3, 3), activation='relu', padding='valid'))
+model.add(Conv2D(64, (3, 3), activation='relu', padding='valid'))
 model.add(Flatten())
-#model.add(Flatten(input_shape = (160, 320, 3)))
+model.add(Dense(100, activation='relu'))
+model.add(Dense(50, activation='relu'))
+model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=7)
+model.fit(X_train, y_train, validation_split=0.2, shuffle=True, nb_epoch=2)
 
 #history_object = model.fit_generator(train_generator, samples_per_epoch =
 #    len(train_samples), validation_data = 
