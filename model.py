@@ -1,10 +1,12 @@
 import csv
 import cv2
 import numpy as np
+#import sys
 
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Cropping2D, Conv2D, Dense
 from scipy import ndimage
+#import matplotlib.pyplot as plt
 
 seed_value = 123
 from numpy.random import seed
@@ -47,6 +49,49 @@ for image, measurement in zip(images, measurements):
 X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
 
+def add_noise(input_image, mean=0, var=10):
+    sigma = var ** 0.5
+    gaussian = np.random.normal(mean, sigma, input_image.shape)
+    noisy_image = np.zeros(input_image.shape, np.float32)
+    noisy_image[:, :, :] = input_image[:, :, :] + gaussian
+    cv2.normalize(noisy_image, noisy_image, 0, 255, cv2.NORM_MINMAX, dtype=-1)
+    noisy_image = noisy_image.astype(np.uint8)
+    
+    return noisy_image
+
+def expand_dataset(X_input, y_input, threshold=0.25):
+    X_duplicate = []
+    y_duplicate = []
+    for i in range(len(y_input)):
+        i_input = i       
+        y_input_val = abs(y_input[i])
+        if y_input_val > threshold:
+            augment_factor = int(16*abs(y_input_val))
+        else:
+            augment_factor = 0
+
+        for _ in range(augment_factor):
+            X_duplicate.append(add_noise(X_input[i_input, :, :, :]))
+            y_duplicate.append(y_input[i_input])
+
+    return X_duplicate, y_duplicate
+
+X_duplicate, y_duplicate = expand_dataset(X_train, y_train, threshold=0.2)
+print('Before nsamples=', len(y_train))
+X_train = np.concatenate((X_train, X_duplicate), axis=0)
+y_train = np.concatenate((y_train, y_duplicate), axis=0)
+print('After nsamples=', len(y_train))
+
+#fignum = 0
+#fignum += 1
+#plt.figure(fignum)
+#plt.hist(y_train, bins=20)  # arguments are passed to np.histogram
+#plt.title("Histogram for training data")
+#plt.xlabel("Class label")
+#plt.ylabel("Number of samples")
+#plt.savefig("histogram_training.png")
+#sys.exit(1)
+
 model = Sequential()
 model.add(Lambda(lambda x: (x - 128.0)/128.0, input_shape = (160, 320, 3)))
 model.add(Cropping2D(cropping=((70,25), (0,0))))
@@ -61,6 +106,7 @@ model.add(Dense(100, activation='relu'))
 model.add(Dense(50, activation='relu'))
 model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
+#model.summary()
 
 model.compile(loss='mse', optimizer='adam')
 model.fit(X_train, y_train, validation_split=0.2, shuffle=True, epochs=2)
@@ -84,3 +130,4 @@ model.fit(X_train, y_train, validation_split=0.2, shuffle=True, epochs=2)
 # plt.show()
 
 model.save('model.h5')
+
