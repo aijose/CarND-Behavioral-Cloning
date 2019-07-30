@@ -2,8 +2,6 @@
 
 ## Writeup Template
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
 ---
 
 **Behavioral Cloning Project**
@@ -65,22 +63,22 @@ My model is based on the model described in this [NVIDIA's paper](https://arxiv.
 
 The above model was modified for the present project, as described later in this report.
 
-Since this is a regression problem, the loss function was chosen to be mean square error.
 
 #### 2. Attempts to reduce overfitting in the model
 
 The first model that was tested was similar to the NVIDIA model which used three 5x5 convolutional layers and two 3x3 convolutional layers. However, while the model
 generated using this architecture was successful on the original track with resolution
 and speed (fastest) setting, it did not work as well for the same track but an alternate
-visualization setting. The new visualization technique merely included better features
+visualization setting.  The new visualization technique merely included better features
 such as shadows of objects. The fact that the model did not work slight modifications in
-the data, shows that it is overfitting to the original training data.
+the data, shows that it is overfitting to the original training data. Also, the model had too many parameters (95,471,419) and was perhaps too heavy for the problem it was trying to solve.
 
 One way to reduce overfitting is to reduce the size of the neural network. As a first step,
 the last convolutional layer was removed. The model obtained from this architecture also
 cleared the track with the original visualization setting but failed at more advanced
 visualization settings. Next, the last two convolutional layers were removed. With this
-setting the model cleared all the visualization settings.
+setting the model cleared all the visualization settings. This was chosen to be the final configuration since eliminating further convolutional layers made the model perform poorly
+on the track. Compared to the original model (parameters), the final model had only 78,427,579 parameters (i.e., 18% reduction).
 
 #### 3. Model parameter tuning
 
@@ -97,18 +95,11 @@ later in this report.
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+My first step was to use a convolution neural network model similar to the [NVIDIA model](https://arxiv.org/pdf/1604.07316.pdf). This model was felt to be appropriate because because it solves a very similar problem. This model was adjusted for overfitting by
+dropping convolutional layers till performance was affected.
 
-My first step was to use a convolution neural network model similar to the [NVIDIA model](https://arxiv.org/pdf/1604.07316.pdf). I thought this model might be appropriate because because it solves a very similar problem.
-
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting.
-
-To combat the overfitting, I modified the model so that ...
-
-Then I ...
-
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
-
+The model was trained initially on the center camera data and did not perform poorly. Through pre-processing (cropping, normalization, etc.) and data augmentation (flipping adding additional camera views) and adjusting the neural network the model was improved till it
+met the desired criteria.
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
 #### 2. Final Model Architecture
@@ -119,7 +110,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
 |-----------------------|-----------------------------------------------|
 | Input         		| 160x320x3 RGB image   							|
 | Lambda      	| Normalize input as (image - 128.0)/128.0 	|
-| Cropping      	| 70 pixels from top and 25 pixels from bottom 	|
+| Cropping      	| 70 pixels from top and 25 pixels from bottom , output (65,320,3)	|
 | Convolution 5x5	    |  1x1 stride, valid padding, output = (61,316,24) |
 | RELU					|												|
 | Convolution 5x5	    |  1x1 stride, valid padding, output=(57,312,16) |
@@ -141,6 +132,7 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
 | RELU					|												|
 | Output		| 1 node        									|
 
+Since this is a regression problem, the loss function was chosen to be mean square error.
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
 
@@ -276,6 +268,10 @@ perspectives of the road that would be seen from the center camera if the car ve
 to the edges of the road. Therefore, by including images from the left and right cameras
 and attributing suitable steering values for these images, we provide training on how
 to recover from mistakes and edge behavior.
+
+* Since the steering angles for the left and right cameras are obtained by adding a correction
+factor to the center camera steering angle, the distribution of samples across steering
+angles is improved by increasing the number samples with higher steering angles.
 
 However, one challenge when including left and right camera images is that when the model is tested, the data provided to the model
 is only the center camera image. Therefore, the steering angles used for the left and right camera images during training must be adjusted to make it correspond to that of a center camera. A steering correction factor is used to assign a suitable value for the left
