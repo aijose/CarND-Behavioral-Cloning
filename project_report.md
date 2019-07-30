@@ -87,11 +87,11 @@ Since this is a regression problem, the loss function was chosen to be mean squa
 
 #### 2. Attempts to reduce overfitting in the model
 
-To reduce overfitting, different the model configuration was adjusted
+The original
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an Adam optimizer, so the learning rate was not tuned manually. The default learning rate for the Adam optimizer is 0.001.
 
 #### 4. Appropriate training data
 
@@ -123,20 +123,22 @@ The final model architecture (model.py lines 18-24) consisted of a convolution n
 
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
-![alt text][image1]
+
+<p align="center">
+<img src="report_images/final_model_architecture_no_bg.png" width="100%" alt>
+</p>
+<p align="center">
+<em> Sample image before (left) and after (right) adding noise
+</p>
 
 #### 3. Creation of the Training Set & Training Process
 
-To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
-
-Manually generating new data by traveling through the track
+Without a joystick, manually generating new data by traveling through the track
 using mouse/keyboard controls was challenging. Fortunately,
 there was some training data provided as part of the project
 and this was found to be adequate to train the model to
 successfully meet the criteria. Provided below is an example image of left, center and
 right lane driving:
-
-
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
 
