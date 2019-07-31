@@ -1,10 +1,8 @@
 # **Behavioral Cloning**
 
-## Writeup Template
-
 ---
 
-**Behavioral Cloning Project**
+## Objectives
 
 The goals / steps of this project are the following:
 * Use the simulator to collect data of good driving behavior
