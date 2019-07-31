@@ -266,7 +266,6 @@ def add_noise(input_image, mean=0, var=10):
 
     return noisy_image
 
-
 def expand_dataset(X_input, y_input, threshold=0.25):
     X_duplicate = []
     y_duplicate = []
@@ -283,8 +282,10 @@ def expand_dataset(X_input, y_input, threshold=0.25):
             y_duplicate.append(y_input[i_input])
 
     return X_duplicate, y_duplicate
-    ```
+```
+
 The histogram obtained after augmenting the center camera data is provided below:
+
 <p align="center">
 <img src="report_images/histogram_center_camera_augmentation.png" width="75%" alt>
 </p>
