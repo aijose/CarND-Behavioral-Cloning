@@ -13,17 +13,6 @@ The goals / steps of this project are the following:
 * Test that the model successfully drives around track one without leaving the road
 * Summarize the results with a written report
 
-
-[//]: # (Image References)
-
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
-
 ## Rubric Points
 ### This section will describe how the each of the [rubric points](https://review.udacity.com/#!/rubrics/432/view) were addressed in this project.  
 
@@ -108,6 +97,23 @@ cleared the track with the original graphics quality setting but failed at more 
 graphics quality settings. Next, the last two convolutional layers were removed. With this
 setting, the model cleared the track for all the graphics quality settings. This was chosen to be the final configuration since eliminating further convolutional layers made the model perform poorly
 on the track even for the fastest graphics quality setting. Compared to the original model (95,471,419 parameters), the final model had only 78,427,579 parameters (i.e., 18% reduction).
+
+Shown below the performance of this final architecture on the train/validation data:
+```
+38572/38572 [==============================] - 541s 14ms/step - loss: 0.0710 - val_loss: 0.0115
+Epoch 2/5
+38572/38572 [==============================] - 530s 14ms/step - loss: 0.0102 - val_loss: 0.0112
+Epoch 3/5
+38572/38572 [==============================] - 530s 14ms/step - loss: 0.0094 - val_loss: 0.0117
+Epoch 4/5
+38572/38572 [==============================] - 530s 14ms/step - loss: 0.0085 - val_loss: 0.0122
+Epoch 5/5
+38572/38572 [==============================] - 528s 14ms/step - loss: 0.0071 - val_loss: 0.0122
+```
+
+It can be seen that the model may be overfitting to the training data, especially after the second epoch. Since the
+accuracy on validation data also worsens after the second epoch, the final version of the model
+was taken to be the one after the second epoch. While dropout can be used to further reduce overfitting, since the above model performed well for all the graphics quality settings, it was chosen as the final architecture the need to add dropout was not deemed absolutely necessary.
 
 #### 3. Model parameter tuning
 
@@ -202,8 +208,8 @@ control decisions. Also, the bottom part of the image contains part of the dashb
 again, is irrelevant for making steering control decisions. The dashboard adds noise to the image,
 especially because the location of the dashboard is different for different cameras views (left, right and center). Therefore, it makes sense to crop out a some of the lower pixels
 in the image as well. As part of the pre-processing step, 70 pixels were removed from
-the top and 25 pixels were removed from the bottom. Sampel images before and after
-crpoping are shown below:
+the top and 25 pixels were removed from the bottom. Sample images before and after
+cropping are shown below:
 
 <p align="center">
 <img src="report_images/left_example.jpg" width="32%" alt>
