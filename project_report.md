@@ -352,6 +352,11 @@ project, the provided workspace was adquate and there was no need to use generat
 
 ### Video of Final Result
 
-The trained model was able to successfully complete a complete lap on the test track. The video showing successful lap completion can be seen at the link below:
+The trained model was able to successfully complete a complete lap on the test track for different graphics quality settings.
 
-[![IMAGE ALT TEXT HERE](report_images/youtube_video_image.png)](https://youtu.be/MZcdxmrmI9c)
+The video showing successful track completion for the fastest (poorest) graphics quality setting can be seen at the link below:
+
+[![IMAGE ALT TEXT HERE](report_images/fastest_youtube.png)](https://youtu.be/El8aMeZu4p4)
+
+The video showing successful track completion for the highest graphics quality setting can be seen at the link below:
+[![IMAGE ALT TEXT HERE](report_images/fantastic_youtube.png)](https://youtu.be/apx4SyRc8tY)
