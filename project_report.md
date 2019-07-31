@@ -95,7 +95,7 @@ One way to reduce overfitting is to reduce the size of the neural network. As a 
 the last convolutional layer was removed. The model obtained from this architecture also
 cleared the track with the fastest graphics quality setting but failed at more advanced
 graphics quality settings. Next, the last two convolutional layers were removed. With this
-setting, the model cleared the track for all the graphics quality settings. This was chosen to be the final configuration since eliminating further convolutional layers made the model perform poorly
+setting, the model cleared the track for most of the graphics quality settings. This was chosen to be the final configuration since eliminating further convolutional layers made the model perform poorly
 on the track even for the fastest graphics quality setting. Compared to the original model (95,471,419 parameters), the final model had only 78,427,579 parameters (i.e., 18% reduction).
 
 Shown below the performance of this final architecture on the train/validation data:
@@ -113,7 +113,7 @@ Epoch 5/5
 
 It can be seen that the model may be overfitting to the training data, especially after the second epoch. Since the
 accuracy on validation data also worsens after the second epoch, the final version of the model
-was taken to be the one after the second epoch. While dropout can be used to further reduce overfitting, since the above model performed well for all the graphics quality settings, it was chosen as the final architecture and the need to add dropout was not deemed absolutely necessary.
+was taken to be the one after the second epoch. While dropout can be used to further reduce overfitting, since the above model performed well for most of the graphics quality settings, it was chosen as the final architecture and the need to add dropout was not deemed absolutely necessary.
 
 #### 3. Model parameter tuning
 
