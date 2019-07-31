@@ -4,13 +4,13 @@ import numpy as np
 import sys
 
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Cropping2D, Conv2D, Dense
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Conv2D
 from scipy import ndimage
 import matplotlib.pyplot as plt
 
 from numpy.random import seed
 from tensorflow import set_random_seed
-seed_value = 123
+seed_value = 101
 seed(seed_value)
 set_random_seed(seed_value)
 
