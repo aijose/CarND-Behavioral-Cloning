@@ -74,7 +74,7 @@ If a model performs well on many graphics settings, it may be expected to genera
 
 The first architecture that was tested was similar to the NVIDIA architecture which used three 5x5 convolutional layers and two 3x3 convolutional layers. However, while the model
 generated using this architecture was successful on the original track at the fastest speed setting, it did not work as well for the same track but using alternate
-graphics quality settings. The fact that the model did not work for different graphics quality settings, shows that may be overfitting to the original training data. Also, the model had too many parameters (95,471,419). The accuracy on the train and validation data for this architecture is provided below:
+graphics quality settings. The fact that the model did not work for different graphics quality settings, shows that it may be overfitting to the original training data. Also, the model had too many parameters (95,471,419). The accuracy on the train and validation data for this architecture is provided below:
 
 ```
 38572/38572 [==============================] - 832s 22ms/step - loss: 0.0665 - val_loss: 0.0114
@@ -89,11 +89,11 @@ Epoch 5/5
 ```
 
 The difference in accuracy between the train and validation data shows that the model is overfitting to the train data. Also, the validation data accuracy starts worsening after the
-third epoch, indicating that there is no need to train beyond three epochs.
+third epoch, indicating that there may be no need to train beyond three epochs.
 
 One way to reduce overfitting is to reduce the size of the neural network. As a first step,
 the last convolutional layer was removed. The model obtained from this architecture also
-cleared the track with the original graphics quality setting but failed at more advanced
+cleared the track with the fastest graphics quality setting but failed at more advanced
 graphics quality settings. Next, the last two convolutional layers were removed. With this
 setting, the model cleared the track for all the graphics quality settings. This was chosen to be the final configuration since eliminating further convolutional layers made the model perform poorly
 on the track even for the fastest graphics quality setting. Compared to the original model (95,471,419 parameters), the final model had only 78,427,579 parameters (i.e., 18% reduction).
@@ -113,7 +113,7 @@ Epoch 5/5
 
 It can be seen that the model may be overfitting to the training data, especially after the second epoch. Since the
 accuracy on validation data also worsens after the second epoch, the final version of the model
-was taken to be the one after the second epoch. While dropout can be used to further reduce overfitting, since the above model performed well for all the graphics quality settings, it was chosen as the final architecture the need to add dropout was not deemed absolutely necessary.
+was taken to be the one after the second epoch. While dropout can be used to further reduce overfitting, since the above model performed well for all the graphics quality settings, it was chosen as the final architecture and the need to add dropout was not deemed absolutely necessary.
 
 #### 3. Model parameter tuning
 
@@ -150,13 +150,13 @@ The final model architecture consisted of a convolutional neural network with th
 | Convolution 5x5	    |  1x1 stride, valid padding, output dimensions=(53,308,48) |
 | RELU					|												|
 | Flatten		| output dimensions = 53x308x48 = 783552 |
-| Fully connected		| output = 100 |
+| Fully connected		| output dimensions = 100 |
 | RELU					|												|
-| Fully connected		| output = 50 |
+| Fully connected		| output dimensions = 50 |
 | RELU					|												|
-| Fully connected		| output = 10 |
+| Fully connected		| output dimensions = 10 |
 | RELU					|												|
-| Output		| 1 node        									|
+| Output		| output dimensions = 1        									|
 
 Since this is a regression problem, the loss function was chosen to be mean square error.
 Here is a visualization of the architecture.
@@ -165,7 +165,7 @@ Here is a visualization of the architecture.
 <img src="report_images/final_model_architecture_no_bg.png" width="100%" alt>
 </p>
 <p align="center">
-<em> Sample image before (left) and after (right) adding noise
+<em> Visualization of final neural network architecture
 </p>
 
 Note that the visualization does not include the pre-processing steps (normalization
@@ -173,7 +173,7 @@ Note that the visualization does not include the pre-processing steps (normaliza
 
 #### 3. Creation of the Training Set & Training Process
 
-Without a joystick, manually generating new data by traveling through the track
+Without a joystick, manually generating new data by driving through the track
 using mouse/keyboard controls was challenging. Fortunately,
 there was some training data provided as part of the project
 and this was found to be adequate to train the model to
@@ -203,7 +203,7 @@ original image. Shown below are sample camera images before and after flipping:
 <em> Left, center and right images after flipping
 </p>
 
-For the model to predict the correct steering angle, only some portions of the image are relevant. For the most part, the top part of the image typically contains background information such as trees, sky, mountain, etc. This is not critical for making steering
+For the model to predict the correct steering angle, only some portions of the image are relevant. For the most part, the top part of the image typically contains background information such as trees, sky, mountain, etc. These are not critical for making steering
 control decisions. Also, the bottom part of the image contains part of the dashboard which,
 again, is irrelevant for making steering control decisions. The dashboard adds noise to the image,
 especially because the location of the dashboard is different for different cameras views (left, right and center). Therefore, it makes sense to crop out a some of the lower pixels
