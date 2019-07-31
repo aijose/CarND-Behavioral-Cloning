@@ -47,7 +47,7 @@ The model used in this project is based on the model described in this [NVIDIA's
 <img src="report_images/nvidia_architecture.png" width="60%" alt>
 </p>
 <p align="center">
-<em> NVIDIA network architecture ([source](https://arxiv.org/pdf/1604.07316.pdf))
+<em> NVIDIA network architecture.
 </p>
 
 The NVIDIA model was modified for the present project, as described later in this report.
